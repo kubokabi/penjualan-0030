@@ -11,7 +11,8 @@
     <!-- Custom styles -->
     <link rel="stylesheet" href="<?= base_url('/public/css/style.min.css'); ?>">
     <!-- Tambahkan di header.php atau di bagian <head> -->
-    <script src="<?= base_url('/public/sweetalert.js'); ?>"></script>
+    <link rel="stylesheet" href="<?= base_url('/public/noty.min.css'); ?>">
+    <script src="<?= base_url('/public/noty.min.js'); ?>"></script>
 
 </head>
 
@@ -22,15 +23,16 @@
         <!-- ! Sidebar -->
         <?php
         require_once 'app/views/Layouts/sidebar.php';
-
+        session_start();
         ?>
-      
+
+
         <div class="main-wrapper">
 
             <nav class="main-nav--bg">
                 <div class="container main-nav">
                     <div class="main-nav-start">
-                        <i class="main-title">Selamat Datang di Halaman Admin</i>
+                        <i class="main-title" style="font-size: 15px;">Selamat Datang di Halaman Admin</i>
                     </div>
                     <div class="main-nav-end">
                         <button class="sidebar-toggle transparent-btn" title="Menu" type="button">

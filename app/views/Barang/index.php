@@ -112,12 +112,147 @@ require_once 'app/views/Layouts/header.php';
     .btn-danger:hover {
         background-color: #c9302c;
     }
+
+
+    /* Styling Noty alert */
+    .noty_layout__center {
+        text-align: center;
+        max-width: 400px;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #fff3cd;
+        border: 1px solid #ffeeba;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Animasi muncul dan hilang */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        to {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+    }
+
+    /* Tambahkan animasi ke Noty */
+    .noty_layout__center .noty_bar {
+        animation: fadeIn 0.4s ease forwards;
+    }
+
+    /* Styling tombol */
+    .noty_button_custom {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px;
+        border-radius: 5px;
+        font-weight: bold;
+        color: #fff;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .noty_button_confirm {
+        background-color: #28a745;
+    }
+
+    .noty_button_confirm:hover {
+        background-color: #218838;
+    }
+
+    .noty_button_cancel {
+        background-color: #dc3545;
+    }
+
+    .noty_button_cancel:hover {
+        background-color: #c82333;
+    }
+
+    /* Style untuk Modal Konfirmasi */
+    .modal-background {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .modal-box {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        width: 400px;
+        max-width: 90%;
+        text-align: center;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-text {
+        margin-bottom: 20px;
+        font-size: 1.1em;
+        color: #333;
+    }
+
+    .modal-button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px;
+        border-radius: 5px;
+        font-weight: bold;
+        color: #fff;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .modal-button.confirm {
+        background-color: #28a745;
+    }
+
+    .modal-button.confirm:hover {
+        background-color: #218838;
+    }
+
+    .modal-button.cancel {
+        background-color: #dc3545;
+    }
+
+    .modal-button.cancel:hover {
+        background-color: #c82333;
+    }
 </style>
 
-<!-- ! Main -->
+<div id="modal-confirm" class="modal-background">
+    <div class="modal-box">
+        <div class="modal-text">Apakah Anda yakin ingin menghapus barang ini?</div>
+        <button class="modal-button confirm" onclick="confirmDelete()">Ya</button>
+        <button class="modal-button cancel" onclick="closeModal()">Tidak</button>
+    </div>
+</div>
+
 <main class="main users chart-page" id="skip-target">
     <div class="container">
-        <!-- Wrapper Flexbox untuk judul dan tombol tambah -->
         <div class="header-flex">
             <h2 class="main-title">Daftar Barang</h2>
             <a href="index.php?action=addBarang" class="btn btn-primary">Tambah Barang</a>
@@ -145,8 +280,8 @@ require_once 'app/views/Layouts/header.php';
                             <td><?php echo number_format($data['harga'], 0, ',', '.'); ?></td>
                             <td><?php echo $data['stok']; ?></td>
                             <td>
-                                <a href="index.php?action=editBarang&kode_barang=<?php echo $data['kode_barang']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="index.php?action=delete&kode_barang=<?php echo $data['kode_barang']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus barang ini?');">Hapus</a>
+                                <a href="index.php?action=editBarang&kode_barang=<?php echo htmlspecialchars($data['kode_barang']); ?>" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="deleteBarang('<?php echo $data['kode_barang']; ?>')">Hapus</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -155,6 +290,57 @@ require_once 'app/views/Layouts/header.php';
         </div>
     </div>
 </main>
+
+<script>
+    let kodeBarangToDelete = null;
+
+    function deleteBarang(kode_barang) {
+        kodeBarangToDelete = kode_barang;
+
+        document.getElementById('modal-confirm').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('modal-confirm').style.display = 'none';
+        kodeBarangToDelete = null;
+    }
+
+    function confirmDelete() {
+        if (!kodeBarangToDelete) return;
+
+        fetch(`index.php?action=deleteBarang&kode_barang=${kodeBarangToDelete}`, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(res => {
+                new Noty({
+                    type: res.status === 'success' ? 'success' : 'error',
+                    layout: 'topRight',
+                    text: res.message,
+                    timeout: 3000,
+                    progressBar: true
+                }).show();
+
+                if (res.status === 'success') {
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                } else {
+                    closeModal();
+                }
+            })
+            .catch(error => {
+                new Noty({
+                    type: 'error',
+                    layout: 'topRight',
+                    text: 'Terjadi kesalahan. Silakan coba lagi.',
+                    timeout: 3000,
+                    progressBar: true
+                }).show();
+                closeModal();
+            });
+    }
+</script>
 
 <?php
 require_once 'app/views/Layouts/footer.php';

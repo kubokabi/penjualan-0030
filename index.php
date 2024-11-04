@@ -9,22 +9,24 @@ function base_url($path = '')
 require_once 'config/database.php';
 require_once 'app/controllers/HomeController.php';
 require_once 'app/controllers/BarangController.php';
+require_once 'app/controllers/PelangganController.php';
 
 // Menghubungkan ke database
 $dbConnection = getDBConnection();
 $HomeController = new HomeController($dbConnection);
 $BarangController = new BarangController($dbConnection);
+$PelangganController = new PelangganController($dbConnection);
 
 // Mendapatkan aksi yang diinginkan
 $action = isset($_GET['action']) ? $_GET['action'] : 'home';
 $kode_barang = isset($_GET['kode_barang']) ? intval($_GET['kode_barang']) : null;
 
 switch ($action) {
-    // Routing Halaman Home
+        // Routing Halaman Home
     case 'home':
         $HomeController->index();
         break;
-    // Routing Bagian Barang
+        // Routing Bagian Barang
     case 'barang':
         $BarangController->index();
         break;
@@ -39,23 +41,20 @@ switch ($action) {
                 'harga' => intval($_POST['harga']),
                 'stok' => intval($_POST['stok'])
             ];
-            $BarangController->store($data);
+            $BarangController->storeBarang($data);
         }
         break;
-
-    case 'view':
+    case 'editBarang':
+        $kode_barang = isset($_GET['kode_barang']) ? $_GET['kode_barang'] : null;
         if ($kode_barang) {
-            $controller->view($kode_barang);
+            $BarangController->editBarang($kode_barang);
+        } else {
+            // Tambahkan pesan error atau redirect jika kode_barang kosong
+            echo "Kode barang tidak ditemukan.";
         }
         break;
-
-    case 'edit':
-        if ($kode_barang) {
-            $controller->edit($kode_barang);
-        }
-        break;
-
-    case 'update':
+    case 'updateBarang':
+        $kode_barang = isset($_GET['kode_barang']) ? $_GET['kode_barang'] : null;
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && $kode_barang) {
             $data = [
                 'kode_barang' => $_POST['kode_barang'],
@@ -64,16 +63,61 @@ switch ($action) {
                 'stok' => intval($_POST['stok'])
             ];
 
-            $controller->update($kode_barang, $data);
+            $BarangController->updateBarang($kode_barang, $data);
         }
         break;
-
-    case 'delete':
+    case 'deleteBarang':
+        $kode_barang = isset($_GET['kode_barang']) ? $_GET['kode_barang'] : null;
         if ($kode_barang) {
-            $controller->delete($kode_barang);
+            $BarangController->deleteBarang($kode_barang);
         }
         break;
+        // End Routing Barang
 
+        // Routing Pelanggan
+    case 'pelanggan':
+        $PelangganController->index();
+        break;
+    case 'addPelanggan':
+        $PelangganController->addPelanggan();
+        break;
+    case 'storePelanggan':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data = [
+                'id_pelanggan' => $_POST['id_pelanggan'],
+                'nama_pelanggan' => $_POST['nama_pelanggan'],
+                'alamat' => $_POST['alamat'],
+            ];
+            $PelangganController->storePelanggan($data);
+        }
+        break;
+    case 'editPelanggan':
+        $id_pelanggan = isset($_GET['id_pelanggan']) ? $_GET['id_pelanggan'] : null;
+        if ($id_pelanggan) {
+            $PelangganController->editPelanggan($id_pelanggan);
+        } else {
+            echo "Kode Pelanggan tidak ditemukan.";
+        }
+        break;
+    case 'updatePelanggan':
+        $id_pelanggan = isset($_GET['id_pelanggan']) ? $_GET['id_pelanggan'] : null;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $id_pelanggan) {
+            $data = [
+                'id_pelanggan' => $_POST['id_pelanggan'],
+                'nama_pelanggan' => $_POST['nama_pelanggan'],
+                'alamat' => $_POST['alamat'],
+            ];
+
+            $PelangganController->updatePelanggan($id_pelanggan, $data);
+        }
+        break;
+    case 'deletePelanggan':
+        $id_pelanggan = isset($_GET['id_pelanggan']) ? $_GET['id_pelanggan'] : null;
+        if ($id_pelanggan) {
+            $PelangganController->deletePelanggan($id_pelanggan);
+        }
+        break;
+        // End Routing Pelanggan
     default:
         $HomeController->index();
         break;

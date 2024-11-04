@@ -1,7 +1,6 @@
 <?php
 require_once 'app/views/Layouts/header.php';
 ?>
-
 <style>
     /* Style untuk main container */
     main.main {
@@ -37,7 +36,8 @@ require_once 'app/views/Layouts/header.php';
         color: #333;
     }
 
-    .form-group input {
+    .form-group input,
+    .form-group textarea {
         width: 100%;
         padding: 10px;
         border-radius: 5px;
@@ -77,40 +77,35 @@ require_once 'app/views/Layouts/header.php';
 
 <main class="main users chart-page" id="skip-target">
     <div class="container">
-        <h2 class="main-title">Edit Barang</h2>
+        <h2 class="main-title">Tambah Pelanggan</h2>
         <div class="form">
-            <form id="barangForm" enctype="multipart/form-data">
+            <form id="PelangganForm" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="kode_barang">Kode Barang</label>
-                    <input type="text" id="kode_barang" name="kode_barang" placeholder="Masukan Kode Barang" value="<?= htmlspecialchars($barang['kode_barang']) ?>" required>
+                    <label for="id_pelanggan">Kode Pelanggan</label>
+                    <input type="text" id="id_pelanggan" name="id_pelanggan" placeholder="Masukan ID Pelanggan" required>
                 </div>
                 <div class="form-group">
-                    <label for="nama_barang">Nama Barang</label>
-                    <input type="text" id="nama_barang" name="nama_barang" placeholder="Masukan Nama Barang" value="<?= htmlspecialchars($barang['nama_barang']) ?>" required>
+                    <label for="nama_pelanggan">Nama Pelanggan</label>
+                    <input type="text" id="nama_pelanggan" name="nama_pelanggan" placeholder="Masukan Nama Pelanggan" required>
                 </div>
                 <div class="form-group">
-                    <label for="harga">Harga</label>
-                    <input type="number" id="harga" name="harga" placeholder="Masukan Harga Barang" value="<?= htmlspecialchars($barang['harga']) ?>" required>
+                    <label for="alamat">Alamat</label>
+                    <textarea name="alamat" id="alamat" rows="3" placeholder="Masukan Alamat" required></textarea>
                 </div>
-                <div class="form-group">
-                    <label for="stok">Stok</label>
-                    <input type="number" id="stok" name="stok" placeholder="Masukan Stok Barang" value="<?= htmlspecialchars($barang['stok']) ?>" required>
-                </div>
-                <button type="button" class="btn-primary" onclick="submitForm()">Simpan Perubahan</button>
+                <button type="button" class="btn-primary" onclick="submitForm()">Simpan Pelanggan</button>
             </form>
-            <a href="index.php?action=barang" class="btn-back">Kembali ke Daftar Barang</a>
+            <a href="index.php?action=pelanggan" class="btn-back">Kembali ke Daftar Pelanggan</a>
         </div>
     </div>
 </main>
 
 <script>
     function submitForm() {
-        const kodeBarang = document.getElementById('kode_barang').value.trim();
-        const namaBarang = document.getElementById('nama_barang').value.trim();
-        const harga = document.getElementById('harga').value.trim();
-        const stok = document.getElementById('stok').value.trim();
+        const kodePelanggan = document.getElementById('id_pelanggan').value.trim();
+        const namaPelanggan = document.getElementById('nama_pelanggan').value.trim();
+        const alamat = document.getElementById('alamat').value.trim();
 
-        if (!kodeBarang || !namaBarang || !harga || !stok) {
+        if (!kodePelanggan || !namaPelanggan || !alamat) {
             new Noty({
                 type: 'warning',
                 layout: 'topRight',
@@ -118,13 +113,13 @@ require_once 'app/views/Layouts/header.php';
                 timeout: 3000,
                 progressBar: true
             }).show();
-            return;  
+            return;
         }
 
-        const form = document.getElementById('barangForm');
+        const form = document.getElementById('PelangganForm');
         const formData = new FormData(form);
 
-        fetch(`index.php?action=updateBarang&kode_barang=<?= $barang['kode_barang'] ?>`, {
+        fetch('index.php?action=storePelanggan', {
                 method: 'POST',
                 body: formData
             })
@@ -140,7 +135,7 @@ require_once 'app/views/Layouts/header.php';
 
                 if (res.status === 'success') {
                     setTimeout(() => {
-                        window.location.href = 'index.php?action=barang';
+                        window.location.href = 'index.php?action=pelanggan';
                     }, 1500);
                 }
             })

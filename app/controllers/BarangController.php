@@ -32,46 +32,87 @@ class BarangController
         require_once 'app/views/detail.php';
     }
 
-    public function store($data)
+    public function storeBarang($data)
     {
+        header('Content-Type: application/json');
+
         if ($this->barangModel->addBarang($data)) {
-            $_SESSION['flash_message'] = [
-                'type' => 'success',
+            echo json_encode([
+                'status' => 'success',
                 'message' => 'Barang berhasil ditambahkan'
-            ];
-            // Komentar redirect sementara
-            // header("Location: index.php?action=barang");
+            ]);
         } else {
-            $_SESSION['flash_message'] = [
-                'type' => 'warning',
+            echo json_encode([
+                'status' => 'error',
                 'message' => 'Kode barang sudah ada!'
-            ];
-            error_log("Flash message set: " . json_encode($_SESSION['flash_message']));
-            // Komentar redirect sementara
-            // header("Location: index.php?action=addBarang");
+            ]);
         }
-        // exit();
+
+        exit(); // Tambahkan exit untuk menghentikan script
     }
 
-
-    // Menampilkan form untuk mengedit barang
-    public function edit($kode_barang)
+    public function editBarang($kode_barang)
     {
-        $data = $this->barangModel->getBarangBykode_barang($kode_barang);
-        require_once 'app/views/edit.php'; // Sesuaikan dengan view untuk edit barang
+        $barang = $this->barangModel->getBarangBykode_barang($kode_barang);
+
+        if (!$barang) {
+            $_SESSION['flash_message'] = [
+                'type' => 'error',
+                'message' => 'Data barang tidak ditemukan!'
+            ];
+            header("Location: index.php?action=barang");
+            exit();
+        }
+
+        require_once 'app/views/Barang/edit.php';
     }
 
-    // Memperbarui barang berdasarkan kode_barang
-    public function update($kode_barang, $data)
+    public function updateBarang($kode_barang, $data)
     {
-        $this->barangModel->updateBarang($kode_barang, $data);
-        header("Location: index.php"); // Redirect setelah memperbarui barang
+        header('Content-Type: application/json');
+
+        if ($data['kode_barang'] !== $kode_barang && $this->barangModel->isBarangExists($data['kode_barang'], $kode_barang)) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Kode barang sudah ada!'
+            ]);
+            exit();
+        }
+
+        $result = $this->barangModel->updateBarang($kode_barang, $data);
+
+        if ($result) {
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Barang berhasil diperbarui'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan saat memperbarui barang'
+            ]);
+        }
+        exit();
     }
 
-    // Menghapus barang berdasarkan kode_barang
-    public function delete($kode_barang)
+    public function deleteBarang($kode_barang)
     {
-        $this->barangModel->deleteBarang($kode_barang);
-        header("Location: index.php"); // Redirect setelah menghapus barang
+        header('Content-Type: application/json');
+
+        $result = $this->barangModel->deleteBarang($kode_barang);
+
+        if ($result) {
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Barang berhasil dihapus'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Gagal menghapus barang'
+            ]);
+        }
+
+        exit();
     }
 }

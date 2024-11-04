@@ -27,14 +27,14 @@
                 </li>
             </ul>
             <span class="system-menu__title">system</span>
-            <ul class="sidebar-body-menu">
+            <ul class="sidebar-body-menu">  
                 <li>
                     <a href="index.php?action=barang" class="<?= $action === 'barang' || $action === 'addBarang' || $action === 'editBarang'? 'active' : '' ?>">
                         <span class="icon category" aria-hidden="true"></span>Barang
                     </a>
                 </li>
                 <li>
-                    <a href="index.php?action=pelanggan" class="<?= $action === 'pelanggan' ? 'active' : '' ?>">
+                    <a href="index.php?action=pelanggan" class="<?= $action === 'pelanggan' || $action === 'addPelanggan' ? 'active' : '' ?>">
                         <span class="icon user-3" aria-hidden="true"></span>Pelanggan
                     </a>
                 </li>

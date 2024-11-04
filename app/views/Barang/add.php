@@ -1,6 +1,5 @@
 <?php
 require_once 'app/views/Layouts/header.php';
-session_start();
 ?>
 <style>
     /* Style untuk main container */
@@ -15,7 +14,6 @@ session_start();
         color: #333;
         margin-bottom: 20px;
         text-align: left;
-        /* Rata kiri */
     }
 
     /* Style untuk form */
@@ -31,7 +29,6 @@ session_start();
     .form-group {
         margin-bottom: 15px;
         text-align: left;
-        /* Rata kiri */
     }
 
     .form-group label {
@@ -76,50 +73,85 @@ session_start();
         text-decoration: underline;
     }
 </style>
-<?php if (isset($_SESSION['flash_message'])): ?>
-    <script>
-        console.log("Running SweetAlert script"); // Debugging log
-        document.addEventListener('DOMContentLoaded', function() {
-            Swal.fire({
-                icon: '<?= $_SESSION['flash_message']['type']; ?>',
-                title: '<?= ucfirst($_SESSION['flash_message']['type']); ?>',
-                text: '<?= $_SESSION['flash_message']['message']; ?>'
-            });
-        });
-    </script>
-    <?php unset($_SESSION['flash_message']); // Hapus pesan setelah ditampilkan 
-    ?>
-<?php endif; ?>
-
-
-
 <main class="main users chart-page" id="skip-target">
     <div class="container">
         <h2 class="main-title">Tambah Barang</h2>
         <div class="form">
-            <form action="index.php?action=storeBarang" method="POST" enctype="multipart/form-data">
+            <form id="barangForm" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="kode_barang">Kode Barang</label>
-                    <input type="text" id="kode_barang" name="kode_barang" placeholder="Masukan Kode Barang" required>
+                    <input type="text" id="kode_barang" name="kode_barang" placeholder="Masukan Kode Barang">
                 </div>
                 <div class="form-group">
                     <label for="nama_barang">Nama Barang</label>
-                    <input type="text" id="nama_barang" name="nama_barang" placeholder="Masukan Nama Barang" required>
+                    <input type="text" id="nama_barang" name="nama_barang" placeholder="Masukan Nama Barang">
                 </div>
                 <div class="form-group">
                     <label for="harga">Harga</label>
-                    <input type="number" id="harga" name="harga" placeholder="Masukan Harga" required>
+                    <input type="number" id="harga" name="harga" placeholder="Masukan Harga">
                 </div>
                 <div class="form-group">
                     <label for="stok">Stok</label>
-                    <input type="number" id="stok" name="stok" placeholder="Masukan Stok" required>
+                    <input type="number" id="stok" name="stok" placeholder="Masukan Stok">
                 </div>
-                <button type="submit" class="btn-primary">Simpan Barang</button>
+                <button type="button" class="btn-primary" onclick="submitForm()">Simpan Barang</button>
             </form>
             <a href="index.php?action=barang" class="btn-back">Kembali ke Daftar Barang</a>
         </div>
     </div>
 </main>
+<script>
+    function submitForm() {
+        const kodeBarang = document.getElementById('kode_barang').value.trim();
+        const namaBarang = document.getElementById('nama_barang').value.trim();
+        const harga = document.getElementById('harga').value.trim();
+        const stok = document.getElementById('stok').value.trim();
+
+        if (!kodeBarang || !namaBarang || !harga || !stok) {
+            new Noty({
+                type: 'warning',
+                layout: 'topRight',
+                text: 'Harap isi semua kolom yang diperlukan!',
+                timeout: 3000,
+                progressBar: true
+            }).show();
+            return; 
+        }
+
+        const form = document.getElementById('barangForm');
+        const formData = new FormData(form);
+
+        fetch('index.php?action=storeBarang', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(res => {
+                new Noty({
+                    type: res.status === 'success' ? 'success' : 'warning',
+                    layout: 'topRight',
+                    text: res.message,
+                    timeout: 3000,
+                    progressBar: true
+                }).show();
+
+                if (res.status === 'success') {
+                    setTimeout(() => {
+                        window.location.href = 'index.php?action=barang';
+                    }, 1500);
+                }
+            })
+            .catch(error => {
+                new Noty({
+                    type: 'error',
+                    layout: 'topRight',
+                    text: 'Terjadi kesalahan. Silakan coba lagi.',
+                    timeout: 3000,
+                    progressBar: true
+                }).show();
+            });
+    }
+</script>
 
 <?php
 require_once 'app/views/Layouts/footer.php';
