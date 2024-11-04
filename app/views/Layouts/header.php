@@ -10,6 +10,9 @@
     <link rel="shortcut icon" href="<?= base_url('/public/img/svg/logo.svg'); ?>" type="image/x-icon">
     <!-- Custom styles -->
     <link rel="stylesheet" href="<?= base_url('/public/css/style.min.css'); ?>">
+    <!-- Tambahkan di header.php atau di bagian <head> -->
+    <script src="<?= base_url('/public/sweetalert.js'); ?>"></script>
+
 </head>
 
 <body>
@@ -17,50 +20,17 @@
     <a class="skip-link sr-only" href="#skip-target">Skip to content</a>
     <div class="page-flex">
         <!-- ! Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-start">
-                <div class="sidebar-head">
-                    <a href="/" class="logo-wrapper" title="Home">
-                        <span class="sr-only">Home</span>
-                        <span class="icon logo" aria-hidden="true"></span>
-                        <div class="logo-text">
-                            <span class="logo-title">Ilham</span>
-                            <span class="logo-subtitle">23.230.0030</span>
-                        </div>
+        <?php
+        require_once 'app/views/Layouts/sidebar.php';
 
-                    </a>
-                    <button class="sidebar-toggle transparent-btn" title="Menu" type="button">
-                        <span class="sr-only">Toggle menu</span>
-                        <span class="icon menu-toggle" aria-hidden="true"></span>
-                    </button>
-                </div>
-                <div class="sidebar-body">
-                    <ul class="sidebar-body-menu">
-                        <li>
-                            <a class="active" href="/"><span class="icon home" aria-hidden="true"></span>Home</a>
-                        </li>
-                    </ul>
-                    <span class="system-menu__title">system</span>
-                    <ul class="sidebar-body-menu">
-                        <li>
-                            <a href="appearance.html"><span class="icon edit" aria-hidden="true"></span>Barang</a>
-                        </li>
-                        <li>
-                            <a href="##"><span class="icon setting" aria-hidden="true"></span>Pelanggan</a>
-                        </li>
-                        <li>
-                            <a href="##"><span class="icon setting" aria-hidden="true"></span>Transaksi</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </aside>
+        ?>
+      
         <div class="main-wrapper">
 
             <nav class="main-nav--bg">
                 <div class="container main-nav">
                     <div class="main-nav-start">
-                        <i>Selamat Datang di Halaman Admin</i>
+                        <i class="main-title">Selamat Datang di Halaman Admin</i>
                     </div>
                     <div class="main-nav-end">
                         <button class="sidebar-toggle transparent-btn" title="Menu" type="button">

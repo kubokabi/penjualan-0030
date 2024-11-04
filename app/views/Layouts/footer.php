@@ -1,7 +1,7 @@
 <footer class="footer">
     <div class="container footer--flex">
         <div class="footer-start">
-            <p style="color: black;">2021 © Ilham Romadhani - All Right Reversed</p>
+            <p style="color: red;">2021 © Ilham Romadhani - All Right Reversed</p>
         </div>
         <ul class="footer-end">
             <li style="color: red;"><strong>23.230.0030</strong></li>

@@ -10,38 +10,49 @@ class BarangController
         $this->barangModel = new Barang($dbConnection);
     }
 
-    // Mendapatkan barang berdasarkan kode_barang
     public function getBarangBykode_barang($kode_barang)
     {
         return $this->barangModel->getBarangBykode_barang($kode_barang);
     }
 
-    // Menampilkan semua barang
-    public function show()
+    public function index()
     {
         $barang = $this->barangModel->getAllBarang();
-        require_once 'app/views/barangView.php'; // Sesuaikan dengan view barang
+        require_once 'app/views/Barang/index.php';
     }
 
-    // Menampilkan detail barang berdasarkan kode_barang
+    public function addBarang()
+    {
+        require_once 'app/views/Barang/add.php';
+    }
+
     public function view($kode_barang)
     {
         $data = $this->barangModel->getBarangBykode_barang($kode_barang);
-        require_once 'app/views/detail.php'; // Sesuaikan dengan view detail barang
+        require_once 'app/views/detail.php';
     }
 
-    // Menampilkan form untuk menambah barang
-    public function add()
-    {
-        require_once 'app/views/add.php'; // Sesuaikan dengan view untuk tambah barang
-    }
-
-    // Menyimpan barang baru
     public function store($data)
     {
-        $this->barangModel->addBarang($data);
-        header("Location: index.php"); // Redirect setelah menambahkan barang
+        if ($this->barangModel->addBarang($data)) {
+            $_SESSION['flash_message'] = [
+                'type' => 'success',
+                'message' => 'Barang berhasil ditambahkan'
+            ];
+            // Komentar redirect sementara
+            // header("Location: index.php?action=barang");
+        } else {
+            $_SESSION['flash_message'] = [
+                'type' => 'warning',
+                'message' => 'Kode barang sudah ada!'
+            ];
+            error_log("Flash message set: " . json_encode($_SESSION['flash_message']));
+            // Komentar redirect sementara
+            // header("Location: index.php?action=addBarang");
+        }
+        // exit();
     }
+
 
     // Menampilkan form untuk mengedit barang
     public function edit($kode_barang)

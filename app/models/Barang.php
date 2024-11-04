@@ -26,15 +26,26 @@ class Barang
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Menambahkan barang baru
+    public function isBarangExists($kode_barang)
+    {
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM barang WHERE kode_barang = :kode_barang");
+        $stmt->bindParam(':kode_barang', $kode_barang);
+        $stmt->execute();
+        return $stmt->fetchColumn() > 0; // Mengembalikan true jika barang sudah ada
+    }
+
     public function addBarang($data)
     {
+        if ($this->isBarangExists($data['kode_barang'])) {
+            return false; // Barang sudah ada, tidak melanjutkan
+        }
         $stmt = $this->db->prepare("INSERT INTO barang (kode_barang, nama_barang, harga, stok) VALUES (:kode_barang, :nama_barang, :harga, :stok)");
         $stmt->bindParam(':kode_barang', $data['kode_barang']);
         $stmt->bindParam(':nama_barang', $data['nama_barang']);
         $stmt->bindParam(':harga', $data['harga'], PDO::PARAM_INT);
         $stmt->bindParam(':stok', $data['stok'], PDO::PARAM_INT);
         $stmt->execute();
+        return true;
     }
 
     // Memperbarui data barang
