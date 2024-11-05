@@ -80,7 +80,7 @@ require_once 'app/views/Layouts/header.php';
     <div class="container">
         <h2 class="main-title">Edit Pelanggan</h2>
         <div class="form">
-            <form id="pelangganForm" enctype="multipart/form-data">
+            <form id="pelangganForm" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="id_pelanggan">ID Pelanggan</label>
                     <input type="text" id="id_pelanggan" name="id_pelanggan" placeholder="Masukan ID Pelanggan" value="<?= htmlspecialchars($pelanggan['id_pelanggan']) ?>" required>

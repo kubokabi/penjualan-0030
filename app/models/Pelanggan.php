@@ -56,15 +56,21 @@ class Pelanggan
 
     public function updatePelanggan($original_id_pelanggan, $data)
     {
-        $stmt = $this->db->prepare("UPDATE pelanggan SET id_pelanggan = :new_id_pelanggan, nama_pelanggan = :nama_pelanggan, alamat = :alamat WHERE id_pelanggan = :original_id_pelanggan");
-        $stmt->bindParam(':new_id_pelanggan', $data['id_pelanggan']);
-        $stmt->bindParam(':nama_Pelanggan', $data['nama_Pelanggan']);
-        $stmt->bindParam(':alamat', $data['alamat']);
-        $stmt->bindParam(':original_id_pelanggan', $original_id_pelanggan);
-        $stmt->execute();
-
-        return true;
+        try {
+            $stmt = $this->db->prepare("UPDATE pelanggan SET id_pelanggan = :new_id_pelanggan, nama_pelanggan = :nama_pelanggan, alamat = :alamat WHERE id_pelanggan = :original_id_pelanggan");
+            $stmt->bindParam(':new_id_pelanggan', $data['id_pelanggan']);
+            $stmt->bindParam(':nama_pelanggan', $data['nama_pelanggan']);
+            $stmt->bindParam(':alamat', $data['alamat']);
+            $stmt->bindParam(':original_id_pelanggan', $original_id_pelanggan);
+            $result = $stmt->execute();
+    
+            return $result;
+        } catch (PDOException $e) {
+            error_log($e->getMessage()); // Logging error untuk debug
+            return false;
+        }
     }
+    
 
     public function deletePelanggan($id_pelanggan)
     {

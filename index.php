@@ -10,12 +10,14 @@ require_once 'config/database.php';
 require_once 'app/controllers/HomeController.php';
 require_once 'app/controllers/BarangController.php';
 require_once 'app/controllers/PelangganController.php';
+require_once 'app/controllers/TransaksiController.php';
 
 // Menghubungkan ke database
 $dbConnection = getDBConnection();
 $HomeController = new HomeController($dbConnection);
 $BarangController = new BarangController($dbConnection);
 $PelangganController = new PelangganController($dbConnection);
+$TransaksiController = new TransaksiController($dbConnection);
 
 // Mendapatkan aksi yang diinginkan
 $action = isset($_GET['action']) ? $_GET['action'] : 'home';
@@ -118,6 +120,24 @@ switch ($action) {
         }
         break;
         // End Routing Pelanggan
+
+        // Routing Transaksi
+    case 'transaksi':
+        $TransaksiController->index();
+        break;
+    case 'detailTransaksi':
+        $id_transaksi = isset($_GET['id_transaksi']) ? $_GET['id_transaksi'] : null;
+        $TransaksiController->detailTransaksi($id_transaksi);
+        break;
+    case 'addTransaksi':
+        $TransaksiController->addTransaksi();
+        break;
+    case 'storeTransaksi':
+        $id_transaksi = isset($_GET['id_transaksi']) ? $_GET['id_transaksi'] : null;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $TransaksiController->storeTransaksi();
+        }
+        break;        
     default:
         $HomeController->index();
         break;

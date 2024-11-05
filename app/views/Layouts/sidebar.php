@@ -39,7 +39,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="index.php?action=transaksi" class="<?= $action === 'transaksi' ? 'active' : '' ?>">
+                    <a href="index.php?action=transaksi" class="<?= $action === 'transaksi' || $action === 'addTransaksi' ? 'active' : '' ?>">
                         <span class="icon paper" aria-hidden="true"></span>Transaksi
                     </a>
                 </li>
