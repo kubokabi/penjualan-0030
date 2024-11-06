@@ -8,7 +8,7 @@ require_once 'app/views/Layouts/header.php';
     }
 
     .form-container {
-        max-width: 600px;
+        max-width: 100%;
         margin: 0 auto;
         background-color: #fff;
         padding: 20px;
@@ -24,29 +24,21 @@ require_once 'app/views/Layouts/header.php';
         font-weight: bold;
     }
 
-    .form-group input {
+    .table {
         width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+    }
+
+    .table th, .table td {
         padding: 10px;
-        border-radius: 5px;
-        border: 1px solid #ddd;
-    }
-
-    .btn-primary {
-        background-color: #5cb85c;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .btn-primary:hover {
-        background-color: #4cae4c;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
     }
 
     .btn-back {
         display: inline-block;
-        margin-top: 10px;
+        margin-top: 20px;
         color: #007bff;
         text-decoration: none;
     }
@@ -58,30 +50,51 @@ require_once 'app/views/Layouts/header.php';
 
 <main class="main">
     <h2>Detail Transaksi</h2>
+    <br>
     <div class="form-container">
-        <form action="index.php?action=updateTransaksi&id_transaksi=<?= htmlspecialchars($transaksi['id_transaksi']) ?>" method="POST">
-            <div class="form-group">
-                <label for="kode_barang">Kode Barang</label>
-                <input type="text" id="kode_barang" name="kode_barang" value="<?= htmlspecialchars($transaksi['kode_barang']) ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="id_pelanggan">ID Pelanggan</label>
-                <input type="text" id="id_pelanggan" name="id_pelanggan" value="<?= htmlspecialchars($transaksi['id_pelanggan']) ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="jumlah">Jumlah</label>
-                <input type="number" id="jumlah" name="jumlah" value="<?= htmlspecialchars($transaksi['jumlah']) ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="total_harga">Total Harga</label>
-                <input type="number" id="total_harga" name="total_harga" value="<?= htmlspecialchars($transaksi['total_harga']) ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="tanggal">Tanggal</label>
-                <input type="datetime-local" id="tanggal" name="tanggal" value="<?= date('Y-m-d\TH:i:s', strtotime($transaksi['tanggal'])) ?>" required>
-            </div>
-            <button type="submit" class="btn-primary">Simpan Perubahan</button>
-        </form>
+        <div class="form-group">
+            <label>ID Transaksi:</label>
+            <div><?= htmlspecialchars($transaksi['id_transaksi']) ?></div>
+        </div>
+        <div class="form-group">
+            <label>ID Pelanggan:</label>
+            <div><?= htmlspecialchars($transaksi['id_pelanggan']) ?></div>
+        </div>
+        <div class="form-group">
+            <label>Total Harga:</label>
+            <div>Rp <?= number_format($transaksi['total_harga'], 0, ',', '.') ?></div>
+        </div>
+        <div class="form-group">
+            <label>Tanggal:</label>
+            <div><?= htmlspecialchars($transaksi['tanggal']) ?></div>
+        </div>
+
+        <h3>Detail Barang</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Kode Barang</th>
+                    <th>Jumlah</th>
+                    <th>Harga Satuan</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($transaksiDetails as $detail): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($detail['kode_barang']) ?></td>
+                        <td><?= htmlspecialchars($detail['jumlah']) ?></td>
+                        <td>Rp <?= number_format($detail['harga'], 0, ',', '.') ?></td>
+                        <td>Rp <?= number_format($detail['jumlah'] * $detail['harga'], 0, ',', '.') ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+                <td style="font-weight:bold;color:red">Grand Total</td>
+                <td></td>
+                <td></td>
+                <td style="font-weight:bold;color:red">Rp <?= number_format($detail['total_harga'], 0, ',', '.') ?></td>
+        </table>
+
         <a href="index.php?action=transaksi" class="btn-back">Kembali ke Daftar Transaksi</a>
     </div>
 </main>

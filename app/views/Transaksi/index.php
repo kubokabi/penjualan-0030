@@ -101,9 +101,7 @@ require_once 'app/views/Layouts/header.php';
                     <tr>
                         <th scope="col">No</th>
                         <th scope="col">ID Transaksi</th>
-                        <th scope="col">Kode Barang</th>
                         <th scope="col">ID Pelanggan</th>
-                        <th scope="col">Jumlah</th>
                         <th scope="col">Total Harga</th>
                         <th scope="col">Tanggal</th>
                         <th scope="col">Aksi</th>
@@ -115,9 +113,7 @@ require_once 'app/views/Layouts/header.php';
                         <tr>
                             <th scope="row"><?php echo $no++; ?></th>
                             <td><?php echo htmlspecialchars($data['id_transaksi']); ?></td>
-                            <td><?php echo htmlspecialchars($data['kode_barang']); ?></td>
                             <td><?php echo htmlspecialchars($data['id_pelanggan']); ?></td>
-                            <td><?php echo htmlspecialchars($data['jumlah']); ?></td>
                             <td><?php echo htmlspecialchars(number_format($data['total_harga'], 0, ',', '.')); ?></td>
                             <td><?php echo htmlspecialchars($data['tanggal']); ?></td>
                             <td>

@@ -280,6 +280,10 @@ require_once 'app/views/Layouts/header.php';
             formData.append(`harga[]`, item.harga);
         });
 
+
+        // Menambahkan total_harga di luar loop
+        formData.append('total_harga', totalHarga);
+
         fetch('index.php?action=storeTransaksi', {
             method: 'POST',
             body: formData

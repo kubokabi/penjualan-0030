@@ -68,7 +68,11 @@ class TransaksiController
 
     public function detailTransaksi($id_transaksi)
     {
-    $transaksi = $this->transaksiModel->getTransaksiByid_transaksi($id_transaksi);
-    require_once 'app/views/Transaksi/detail.php';
+        $transaksiDetails = $this->transaksiModel->getTransaksiById($id_transaksi);
+        $transaksi = $transaksiDetails[0]; // Data utama transaksi
+        $detailBarang = array_slice($transaksiDetails, 1); // Data detail barang
+    
+        require_once 'app/views/Transaksi/detail.php';
     }
+    
 }

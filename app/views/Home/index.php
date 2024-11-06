@@ -1,6 +1,5 @@
 <?php 
 require_once 'app/views/Layouts/header.php'; 
- 
 ?>
 
 <!-- ! Main -->
@@ -14,7 +13,7 @@ require_once 'app/views/Layouts/header.php';
                         <i data-feather="shopping-cart" aria-hidden="true"></i>
                     </div>
                     <div class="stat-cards-info">
-                        <p class="stat-cards-info__num">1478 286</p>
+                        <p class="stat-cards-info__num"><?= htmlspecialchars($counts['total_barang']); ?></p>
                         <p class="stat-cards-info__title">Total Barang</p>
                     </div>
                 </article>
@@ -25,7 +24,7 @@ require_once 'app/views/Layouts/header.php';
                         <i data-feather="user-check" aria-hidden="true"></i>
                     </div>
                     <div class="stat-cards-info">
-                        <p class="stat-cards-info__num">1478 286</p>
+                        <p class="stat-cards-info__num"><?= htmlspecialchars($counts['total_pelanggan']); ?></p>
                         <p class="stat-cards-info__title">Total Pelanggan</p>
                     </div>
                 </article>
@@ -36,7 +35,7 @@ require_once 'app/views/Layouts/header.php';
                         <i data-feather="dollar-sign" aria-hidden="true"></i>
                     </div>
                     <div class="stat-cards-info">
-                        <p class="stat-cards-info__num">1478 286</p>
+                        <p class="stat-cards-info__num"><?= htmlspecialchars($counts['total_transaksi']); ?></p>
                         <p class="stat-cards-info__title">Total Transaksi</p>
                     </div>
                 </article>

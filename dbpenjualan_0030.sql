@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 05, 2024 at 02:15 PM
+-- Generation Time: Nov 06, 2024 at 08:51 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.17
 
@@ -39,9 +39,9 @@ CREATE TABLE `barang` (
 --
 
 INSERT INTO `barang` (`kode_barang`, `nama_barang`, `harga`, `stok`) VALUES
-('a001', 'Contoh Barang A', 150000, 86),
-('a002', 'Contoh Barang B', 250000, 43),
-('a003', 'Contoh Barang C', 100000, 198);
+('A002', 'SAMPO', 200000, 4),
+('a003', 'Contoh Barang C', 100000, 189),
+('B004', 'TAS', 200000, 4);
 
 -- --------------------------------------------------------
 
@@ -62,8 +62,10 @@ CREATE TABLE `detail_transaksi` (
 --
 
 INSERT INTO `detail_transaksi` (`id_detail`, `id_transaksi`, `kode_barang`, `jumlah`, `harga`) VALUES
-(12, 6749, 'a003', 2, 100000),
-(13, 6749, 'a002', 4, 250000);
+(20, 6754, 'a003', 1, 100000),
+(21, 6755, 'a003', 1, 100000),
+(22, 6755, 'B004', 1, 200000),
+(23, 6755, 'A002', 1, 200000);
 
 -- --------------------------------------------------------
 
@@ -104,9 +106,8 @@ CREATE TABLE `transaksi` (
 --
 
 INSERT INTO `transaksi` (`id_transaksi`, `id_pelanggan`, `total_harga`, `tanggal`) VALUES
-(6746, 'p001', 700000, '2024-11-05 08:46:58'),
-(6748, 'p001', 0, '2024-11-05 08:53:42'),
-(6749, 'p001', 0, '2024-11-05 09:04:27');
+(6754, 'p002', 100000, '2024-11-06 08:26:17'),
+(6755, 'p003', 500000, '2024-11-06 08:27:24');
 
 --
 -- Indexes for dumped tables
@@ -147,13 +148,13 @@ ALTER TABLE `transaksi`
 -- AUTO_INCREMENT for table `detail_transaksi`
 --
 ALTER TABLE `detail_transaksi`
-  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6750;
+  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6756;
 
 --
 -- Constraints for dumped tables
